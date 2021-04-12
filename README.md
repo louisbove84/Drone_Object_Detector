@@ -8,21 +8,38 @@
 
 * [General Information](#General-Information)
     * [Exploratory Data Analysis](#Exploratory-Data-Analysis)
-    * [Supervised Learning Models](#Supervised-Learning-Models)
+    * [Building Training Set](#Buidling-Training-Set)
     * [Final Results](#Final-Results)
     * [Tools Used](#Tools-Used)
     * [Future Improvements](#Future-Improvements)
 
 
 ## General Information
-Towards Data Science Inc. provides a platform for thousands of people to exchange ideas and to expand their understanding of data science. This projects aims combine use supervised and transfer learning to create a model that is able to detect whether a particular data science article will be successful on Towards Data Science Inc.'s website. This will enable businesses or authors to quickly assess whether their time will be effectively used on the idea they have.
+As the worlds militaries move closer to utilizing drones for wider mission sets, with zero risk to human operators, it is logical to assume those drones will be inclinded to fly deeper into higher risk engagement zones. When this happens it will become more and more difficult to identify the drone type and country of origin. In order to create a machine learning model to assist in drone detection and classification there must be a very large dataset to train from. This highlights two issues when building a dataset:
+
+1. Some fixed wing military drones look very similar, even to the human eye, at farther distances making it difficult to create accurate training datasets using only open source images.
+2. The amount of open source images is very limited and usually only include images of the drone parked on the runway, contrary to the airborne aspect needed for training. 
+
+In order to overcome these challenges we will utilize the power of a pretrained segmentation model, OpenCV, and Transfer Learning.
 _______________________________________________
 ## Exploratory Data Analysis:
 
-Approximately 35,000 article titles, dates, and 'claps' (similar to 'likes') were scraped from 'www.towardsdatascience.com' from 01Jan2018-30Dec2020. The total articles printed increased from around 5000 in 2018 to around 20000 in 2020, which is approximately 50 articles a week! First, the Term Frequency-Inverse Document Frequency (TF-IDF) was used to find words that increased and decreased the most from 2018-2020. Next, the article titles were labeled as popular if they were in the top 35% of 'claps' for that year and unpopular if they were in the bottom 35% of 'claps' for that year, in order to properly separate the target data for classification. Finally, the full article texts were scraped on the popular and unpopular data sets in order to give more fidelity to the results. The word clouds below show terms that increased (in green) and decreased (in red) between 2018 and 2020:
+A quick Google search highlights the first issue with building a training set. Searching for a Chinese 'CH-5 drone' provides many pictures of fixed wing drones but it is not immediately evident if all the images searched are in fact a 'CH-5 Drone'. The two results from that search, shown below, demonstrate the difficultly accurately classifying the results. The drone on the left is a Reaper drone, built by the United States, while the drone on the right is a CH-5, built by China. Without the US Military marking on the back of the drone in the picture on the left it would be very difficult to accurately classify it. Misclassifying images in the training set would certainly spell disaster for the final models precision, recall, and accuracy. 
 
 <p align="center" >
-  <img src="images/wordcloud.png" width="800">
+  <img src="drone_img2.jpg" width="800">
+</p>
+
+The next option is to find video clips of specific drones and break the video down into frames for training. This method was much more reliable for label accuracy and provided a larger set of images to work with:
+
+Global Hawk (USA) -  1396 Frames
+Reaper (USA) - 300 + 787 Frames
+Wing Loong (CHA) - 180 + 315 + ____ Frames
+
+One advantage of object detecting when it comes to flying drones is that most of the time the drone will be the only object within the frame, making it ideal for using a segmentation model (Pixellib) to identify the aircraft and then drawing a contour around the image. This will allow for a bounding box to be drawn around the largest contour in the image, which most of the time is the drone. Below shows the original image on the left followed by a segmented image of the drone in the middle and a final image on the left which includes the contour line and bounding box. 
+
+<p align="center" >
+  <img src="drone_img3.jpg" width="800">
 </p>
 
 ### The project files are organized as follows:
