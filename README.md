@@ -8,8 +8,9 @@
 
 * [General Information](#General-Information)
     * [Building Training Set](#Building-Training-Set)
-    * [Transfer Learning Model: EficientDet](#Transfer-Learning-Model:-EfficientDet)
+    * [Transfer Learning Model: EfficientDet](#Transfer-Learning-Model:-EfficientDet)
     * [Final Results](#Final-Results)
+    * [Tools Used](#Tools-Used)
     * [Tools Used](#Tools-Used)
     * [Future Improvements](#Future-Improvements)
 
