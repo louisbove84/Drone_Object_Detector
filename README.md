@@ -8,7 +8,8 @@
 
 * [General Information](#General-Information)
     * [Building Training Set](#Building-Training-Set)
-    * [Transfer Learning](#Transfer-Learning)
+    * [Transfer Learning Model: EfficientDet](#Transfer-Learning-Model:-EfficientDet)
+    * [Final Results](#Final-Results)
     * [Tools Used](#Tools-Used)
     * [Future Improvements](#Future-Improvements)
 
@@ -73,7 +74,7 @@ By implementing our own bounding boxes we are able to utilize those coordinates 
 
 ____________________________________________________________
 
-## Supervised Learning Model: EfficientDet
+## Transfer Learning Model: EfficientDet
 
 EfficientDet is an object detection model created by the Google brain team, achieving the highest accuracy with fewest training epochs in object detection tasks. It is an advanced version of EfficientNet, which was the state of art object classification model in early 2019. This problem set requires accurate object detection using standard video cameras, which provide video feeds with approximately 30 frames per second (FPS). The diagram below shows that 'Efficientdet_D0' will provide the best Mean Average Precision (mAP) at video feeds with 30 FPS.
 
