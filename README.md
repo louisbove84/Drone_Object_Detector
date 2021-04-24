@@ -89,8 +89,8 @@ _________________________________________________________
 After 30,000 training steps the mean average precision (mAP) scores are shown below, along with examples of True Positives from the testing set: 
 
 * mAP: 0.587327
-* mAP@.50IOU: 0.932432
-* mAP@.75IOU: 0.640563
+* mAP at 0.50 IOU: 0.932432
+* mAP at 0.75 IOU: 0.640563
 
 <p align="center" >
   <img src="images/drone_img6.jpg" width="800">
