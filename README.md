@@ -13,7 +13,6 @@
     * [Tools Used](#Tools-Used)
     * [Future Improvements](#Future-Improvements)
 
-
 ## General Information
 As militaries move closer to utilizing drones for wider mission sets it is logical to assume the drone population will continue to expand. With more drones in the air it will be more critical to identify the drone type and country of origin, using everyday digital cameras. In order to create a machine learning model to assist in drone detection and classification there must be a very large dataset to train from. This highlights two issues when building that dataset:
 
