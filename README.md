@@ -1,5 +1,5 @@
 <p align="center" >
-  <img src="drone_img1.jpg" width="800">
+  <img src="images/drone_img1.jpg" width="800">
 </p>
 
 # Drone Object Detection and Classification
@@ -7,9 +7,8 @@
 ## Table of Contents
 
 * [General Information](#General-Information)
-    * [Exploratory Data Analysis](#Exploratory-Data-Analysis)
-    * [Building Training Set](#Buidling-Training-Set)
-    * [Final Results](#Final-Results)
+    * [Building Training Set](#Building-Training-Set)
+    * [Transfer Learning](#Transfer-Learning)
     * [Tools Used](#Tools-Used)
     * [Future Improvements](#Future-Improvements)
 
@@ -21,115 +20,97 @@ As the worlds militaries move closer to utilizing drones for wider mission sets,
 2. The amount of open source images is very limited and usually only include images of the drone parked on the runway, contrary to the airborne aspect needed for training. 
 
 In order to overcome these challenges we will utilize the power of a pretrained segmentation model, OpenCV, and Transfer Learning.
+
+### The project files are organized as follows:
+
+- find_box.py: Python file used to break down video into frames, augement the images, create bounding boxes, and split the verified images into subsequent folders. 
+- generate_allrecords.py: Python file used to create CSV, TFRecord, and COCO files for model training.
+- Model Training Files...
+- images: All images used in the README file
+- src: Contains a python file with all the functions used in this project
+- data: Includes sample data to run the model
+
+### Resources:
+
+* Roboflow (https://blog.roboflow.com/pp-yolo-beats-yolov4-object-detection/)
+* Raccoon Github (https://github.com/datitran/raccoon_dataset)
+* Countour/Bounding Box (https://www.youtube.com/watch?v=WQeoO7MI0Bs)
+* Pixellib (https://pixellib.readthedocs.io/en/latest/change_image_bg.html)
 _______________________________________________
-## Exploratory Data Analysis:
+## Building Training Set:
 
 A quick Google search highlights the first issue with building a training set. Searching for a Chinese 'CH-5 drone' provides many pictures of fixed wing drones but it is not immediately evident if all the images searched are in fact a 'CH-5 Drone'. The two results from that search, shown below, demonstrate the difficultly accurately classifying the results. The drone on the left is a Reaper drone, built by the United States, while the drone on the right is a CH-5, built by China. Without the US Military marking on the back of the drone in the picture on the left it would be very difficult to accurately classify it. Misclassifying images in the training set would certainly spell disaster for the final models precision, recall, and accuracy. 
 
 <p align="center" >
-  <img src="drone_img2.jpg" width="800">
+  <img src="images/drone_img2.jpg" width="800">
 </p>
 
-The next option is to find video clips of specific drones and break the video down into frames for training. This method was much more reliable for label accuracy and provided a larger set of images to work with:
+The next option is to find video clips of specific drones and break the video down into frames for training, validation and testing. This method was much more reliable for label accuracy and provided a larger set of images to work with. The following number of frames were taken from open source Youtube Videos:
 
-Global Hawk (USA) -  1396 Frames
-Reaper (USA) - 300 + 787 Frames
-Wing Loong (CHA) - 180 + 315 + ____ Frames
+* Global Hawk (USA) -  1396 Frames
+* Reaper (USA) - 1087 Frames
+* Wing Loong (CHA) - 606 Frames
 
-One advantage of object detecting when it comes to flying drones is that most of the time the drone will be the only object within the frame, making it ideal for using a segmentation model (Pixellib) to identify the aircraft and then drawing a contour around the image. This will allow for a bounding box to be drawn around the largest contour in the image, which most of the time is the drone. Below shows the original image on the left followed by a segmented image of the drone in the middle and a final image on the left which includes the contour line and bounding box. 
+One advantage of object detecting when it comes to flying drones is that most of the time the drone will be the only object within the frame, making it ideal for using a segmentation model (Pixellib: https://pixellib.readthedocs.io/en/latest/change_image_bg.html) to identify the aircraft and then drawing a contour around the image. This will allow for a bounding box to be drawn around the largest contour in the image, which most of the time is the drone. Below shows the original image on the left followed by a segmented image of the drone in the middle and a final image on the left which includes the contour line and bounding box. 
 
 <p align="center" >
-  <img src="drone_img3.jpg" width="800">
+  <img src="images/drone_img3.jpg" width="800">
 </p>
 
-### The project files are organized as follows:
+We will then use image augmentation to rotate, shear, flip, and zoom the images so we are able to get over 15,000 images of each drone. 
 
-- EDA.ipynb: File used to scrape, explore, and transform the data for modeling
-- NLP.ipynb: File used for supervised learning models
-- images: All images used in the README.md file
-- src: Contains a python file with all the functions used in this project
-- data: Includes sample '.csv' data to run the EDA & NLP files
+* Global Hawk (USA) -  19,814 Training Frames
+* Reaper (USA) - 15.244 Training Frames
+* Wing Loong (CHA) - 17,564 Training Frames
 
-### Articles used for help:
+Because the segmentation model does not always detect the aircraft and some of the videos do not always show the drone, we must browse the bounded images to ensure all the images contain the drone for correct classification. 
 
-* Text Classification with XLNet in Action: https://medium.com/@yingbiao/text-classification-with-xlnet-in-action-869029246f7e
-* Scraping Medium with Python & Beautiful Soup: https://medium.com/the-innovation/scraping-medium-with-python-beautiful-soup-3314f898bbf5
+<p align="center" >
+  <img src="images/drone_img4.jpg" width="800">
+</p>
+
+By implementing our own bounding boxes we are able to utilize those coordinates to create individual Pascal VOC files for each image and subsequently create CSV and TFRecord files for use in the Transfer Learning of EffecientDet. 
+
 ____________________________________________________________
 
-## Supervised Learning Models:
+## Supervised Learning Model: EfficientDet
 
-***Step 1: Establish Training and Testing Data***
-
-The training and testing data was compiled from articles between 2018 to 2020 and split into a data set containing the top and bottom 35% of articles based on the number of 'claps' they received. Examples from the popular and unpopular article titles are seen below:
+EfficientDet is an object detection model created by the Google brain team, achieving the highest accuracy with fewest training epochs in object detection tasks. It is an advanced version of EfficientNet, which was the state of art object detection model in early 2019. This problem set requires accurate object detection using standard video cameras, which provide video feeds with approximately 30 frames per second (FPS). The diagram below shows that 'Efficientdet_D0' will provide the best Mean Average Precision (mAP) at video feeds above 30 FPS.
 
 <p align="center" >
-  <img src="images/title_examples.png" width="800">
+  <img src="images/drone_img5.jpg" width="800">
 </p>
 
-***Step 2: Classification on Article Titles***
-
-A list of classification models were used on the popular/unpopular article titles from the data set including: Decision Tree, Random Forest, KNN, XGBClassifier, and Gradient Boosting Classifier. The figure below shows how poorly these models did using only the article titles. The best model was the Random Forrest Classifier with an F-1 score of 0.66.
-
-<p align="center" >
-  <img src="images/titles_classification.png">
-</p>
-
-***Step 3: Regression on Article Titles***
-
-Due to the inaccuracies from the classification results the decision was made to run a list of regression models on article titles from the entire data set using the number of 'claps' as the target data. The results below do not show much improvement from the baseline model with an RMSE of 1907. The best model in comparison is the Ridge Regression with an RMSE of 1886.
-
-
-<p align="center">
-  <img src="images/titles_regression.png">
-</p>
-
-***Step 4: Classification on Full Article Text***
-
-In order to improve accuracy the full article text was used with the same classification labels used in Step 2. The results improved slightly with the Gradient Boosting Classifier achieving an F-1 score of 0.72.
-
-<p align="center">
-  <img src="images/text_classification.png">
-</p>
-
-***Step 5: Resgression on Full Article Text***
-
-Finally, the same full article text was used with the same regression information from Step 3. The results are shown below with none of the models doing better than the baseline model RMSE of 1907.
-
-<p align="center">
-  <img src="images/text_regression.png">
-</p>
-
-__________________________________________________________
+With help from the customized EfficientDet model structure built by RoboFlow (https://blog.roboflow.com/train-a-tensorflow2-object-detection-model/) we are able to feed in our own dataset and obtain impressive results. 
+_________________________________________________________
 
 ## Final Results
 
-The final results from the supervised models shows that the Gradient Boosting Model, used on full article text, demonstrates the best results when to predict the popularity of an article.
+After 30,000 training steps final results from the supervised models shows that the Gradient Boosting Model, used on full article text, demonstrates the best results when to predict the popularity of an article.
 
-<p align="center">
-  <img src="images/results.png">
+* mAP: 0.587327
+* mAP@.50IOU: 0.932432
+* mAP@.75IOU: 0.640563
+
+<p align="center" >
+  <img src="images/drone_img6.jpg" width="800">
 </p>
-
- The confusion matrix for the Gradient Boosting Model is shown below. Please note that 1 indicates a popular article and 0 indicated an unpopular one.
-
-<p align="center">
-  <img src="images/cm.png">
-</p>
-
 _______________________________________
 
 ## Tools Used
 
 ***Python:***
 
-Data Gathering: Pandas<br>
-Data Analysis: Google Colab, Tensor Flow, Pandas, Scikit-Learn, NLTK<br>
+Data Gathering: Python<br>
+Data Analysis: Google Colab, TensorFlow, Pandas, Scikit-Learn<br>
 
 ***Visualization:***
 
-Data Visualization: Matplotlib
+Data Visualization: Tensorboard
 
 _______________________________________
 ## Future Improvements
 
-1. Increase accuracy of the models by running more full text articles through the models.
-2. Scrape more articles from other websites.
+1. Translate the training dataset to COCO format and determine model results from Yolov5 for comparison to EfficientDet.
+2. Run model on drone video to see the real time results of the model.
+

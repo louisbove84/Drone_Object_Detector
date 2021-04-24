@@ -10,6 +10,8 @@ import glob
 import pandas as pd
 import shutil
 import io
+from keras.preprocessing.image import ImageDataGenerator
+from skimage import io
 
 
 class Preprocess:
@@ -30,7 +32,7 @@ class Preprocess:
         pass
 
     #Credit: https://stackoverflow.com/users/7319568/harsh-patel
-    def video_to_frames(self, input_loc, output_loc):
+    def video_to_frames(self, input_loc, output_loc, vid_file):
         """Method to extract frames from input video file
         and save them as separate frames in an output directory.
         
@@ -66,7 +68,7 @@ class Preprocess:
                 ret, frame = cap.read()
         
                 # Write the results back to output location.
-                cv2.imwrite(output_loc + "/%#05d.jpg" % (count+1), frame)
+                cv2.imwrite(output_loc + "/{n}".format(n=vid_file[:-4]) + "%#05d.jpg" % (count+1), frame)
             count = count + 1
         
             # If there are no more frames left
@@ -83,7 +85,7 @@ class Preprocess:
                 print ("It took %d seconds forconversion." % (time_end-time_start))
                 break
     
-    def make_sub_folders(self, vid_file, output_foldername, classification_name):
+    def make_sub_folders(self, vid_file, output_foldername):
 
         """Method to set up folder structure and then calls 
         video_to_frame method to deposite separated frames into 
@@ -111,9 +113,47 @@ class Preprocess:
         
         #Call method to split video into images folder
         preproc = Preprocess()
-        preproc.video_to_frames(input_loc, output_loc)
+        preproc.video_to_frames(input_loc, output_loc, vid_file)
+
+        #Call method to augment the images created
+        preproc.augment_images(output_loc, vid_file)
 
         return output_loc
+
+    def augment_images(self, output_loc, vid_file):
+        """
+            Augment the picture created from the video file.
+
+            Args:
+                output_loc: The location of all the separated images
+            
+            Returns:
+                None
+        """
+
+        num_files = len(os.listdir(output_loc))
+
+        datagen = ImageDataGenerator(
+            rotation_range=45,     #Random rotation between 0 and 45
+            width_shift_range=0.2,    
+            height_shift_range=0.2,
+            shear_range=0.2,
+            zoom_range=0.2,
+            horizontal_flip=True,
+            fill_mode='nearest')     
+
+        #Multiclass. Read dirctly from the folder structure using flow_from_directory
+        i = 0
+        for batch in datagen.flow_from_directory(directory=output_loc[:-7], 
+                                                batch_size= num_files,  
+                                                target_size=(256, 256),
+                                                color_mode="rgb",
+                                                save_to_dir= output_loc, 
+                                                save_prefix='aug_'+vid_file[:-4], 
+                                                save_format='jpg'):
+            i += 1
+            if i > 10:
+                break 
 
     #Credit: 
     # 1. https://www.youtube.com/watch?v=VF8M9DdZ_Aw

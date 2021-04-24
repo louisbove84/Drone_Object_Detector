@@ -7,6 +7,8 @@ import time
 import os
 import shutil
 from functions import *
+from keras.preprocessing.image import ImageDataGenerator
+from skimage import io
 
 if __name__=="__main__":
 
@@ -20,7 +22,7 @@ if __name__=="__main__":
     prepro = Preprocess()
 
     #Create folder structure and break video file into images
-    output_loc = prepro.make_sub_folders(vid_file, output_foldername, classification_name)
+    output_loc = prepro.make_sub_folders(vid_file, output_foldername)
     #output_loc = '/home/louis/Desktop/reaper_test/images/'
     
     #Create XML files for all images

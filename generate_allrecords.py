@@ -10,13 +10,13 @@ from functions import *
 
 if __name__=="__main__":
 
-    #final_foldername = input("Please provide a name for the folder structure for the final model: ")
+    final_foldername = input("Please provide a name for the folder structure for the final model: ")
     
     prepro = Preprocess()
 
     #Create folder structure and break video file into images
-    #output_loc = prepro.make_final_folders(final_foldername)
-    output_loc = "/home/louis/Desktop/final_test/images"
+    output_loc = prepro.make_final_folders(final_foldername)
+    #output_loc = "/home/louis/Desktop/final_test/images"
 
     #Allow user to compile all images and XML files into the master folders
     while True:
