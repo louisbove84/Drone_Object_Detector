@@ -101,7 +101,6 @@ _______________________________________
 
 ***Python:***
 
-Data Gathering: Python<br>
 Data Analysis: Google Colab, TensorFlow, Pandas, Scikit-Learn<br>
 
 ***Visualization:***
