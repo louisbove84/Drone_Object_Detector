@@ -60,7 +60,7 @@ One advantage of object detecting when it comes to flying drones is that most of
 We will then use image augmentation to rotate, shear, flip, and zoom the images so we are able to get over 15,000 images of each drone. 
 
 * Global Hawk (USA) -  19,814 Training Frames
-* Reaper (USA) - 15.244 Training Frames
+* Reaper (USA) - 15,244 Training Frames
 * Wing Loong (CHA) - 17,564 Training Frames
 
 Because the segmentation model does not always detect the aircraft and some of the videos do not always show the drone, we must browse the bounded images to ensure all the images contain the drone for correct classification. The image below shows the segmented images a human would have to scroll through in order to verify there is in fact a bounding box and that the drone is fully ensconced within the bounding box.
