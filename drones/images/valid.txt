@@ -1,0 +1,3 @@
+/home/louis/Desktop/drones/images/valid/aug_reaper_1_2519479.jpg
+/home/louis/Desktop/drones/images/valid/10aug_wingloong2_128_424293.jpg
+/home/louis/Desktop/drones/images/valid/aug_ghawk2_4_3807468.jpg

@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='latin-1'?>
+<annotation>
+	<folder>/home/louis/Desktop/wingloong/images</folder>
+	<filename>1aug_wingloong_132_1101466.jpg</filename>
+	<path>//home/louis/Desktop/wingloong/images/1aug_wingloong_132_1101466.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>256</width>
+		<height>256</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>wingloong</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>86</xmin>
+			<xmax>204</xmax>
+			<ymin>67</ymin>
+			<ymax>132</ymax>
+		</bndbox>
+	</object>
+</annotation>

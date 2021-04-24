@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='latin-1'?>
+<annotation>
+	<folder>/home/louis/Desktop/reaper/images</folder>
+	<filename>aug_reaper_2_1390644.jpg</filename>
+	<path>//home/louis/Desktop/reaper/images/aug_reaper_2_1390644.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>256</width>
+		<height>256</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>reaper</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>78</xmin>
+			<xmax>179</xmax>
+			<ymin>130</ymin>
+			<ymax>205</ymax>
+		</bndbox>
+	</object>
+</annotation>
