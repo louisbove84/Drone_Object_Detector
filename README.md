@@ -57,6 +57,8 @@ One advantage of object detecting when it comes to flying drones is that most of
   <img src="images/drone_img3.jpg" width="800">
 </p>
 
+[![Drone Side by Side](https://www.youtube.com/watch?v=FMjDTdIWaIU)](https://www.youtube.com/watch?v=FMjDTdIWaIU)
+
 We will then use image augmentation to rotate, shear, flip, and zoom the images so we are able to get over 15,000 images of each drone. 
 
 * Global Hawk (USA) -  19,814 Training Frames
