@@ -57,7 +57,11 @@ One advantage of object detecting when it comes to flying drones is that most of
   <img src="images/drone_img3.jpg" width="800">
 </p>
 
-[![Drone Side by Side](https://www.youtube.com/watch?v=FMjDTdIWaIU)](https://www.youtube.com/watch?v=FMjDTdIWaIU)
+This video shows how the segmentation model is able to identify the aircraft, find the largest contour in the image, and draw a bounding box around it.
+
+<p align="center" >
+  <img src="images/drone_gif.gif" width="400">
+</p>
 
 We will then use image augmentation to rotate, shear, flip, and zoom the images so we are able to get over 15,000 images of each drone. 
 
